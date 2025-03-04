@@ -1,86 +1,111 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
+import { ref, reactive } from 'vue';
+import type { FormData } from './types/FormData';
+import ComponentA from './components/componentA.vue';
+import ComponentB from './components/componentB.vue';
+import ComponentC from './components/componentC.vue';
+import TaskList from './components/TaskList.vue';
 
-import HelloWorld from './components/HelloWorld.vue';
+const currentStep = ref(1);
+const isLoading = ref(false);
+
+const formData = ref<FormData>({
+  firstName: '',
+  lastName: '',
+  email: '',
+  street: '',
+  city: '',
+  zipCode: '',
+  newsletter: true,
+  interests: []
+});
+
+const componentARef = ref();
+
+const nextStep = async () => {
+  if (currentStep.value === 1) {
+    await componentARef.value?.validateAll();
+    if (!componentARef.value?.isValid) {
+      alert('Please fill all required fields correctly');
+      return;
+    }
+  }
+  if (currentStep.value < 3) {
+    currentStep.value++;
+  }
+};
+
+const prevStep = () => {
+  if (currentStep.value > 1) {
+    currentStep.value--;
+  }
+};
+
+const submitForm = async () => {
+  isLoading.value = true;
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    console.log('Form submitted:', formData.value);
+    alert('Form submitted successfully!');
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Submission failed!');
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <TaskList></TaskList>
+  <!-- <main>
+    <div class="form-container">
+      <div class="steps-indicator">Step {{ currentStep }} of 3</div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <Transition name="fade" mode="out-in">
+        <ComponentA v-if="currentStep === 1" v-model:personal="formData" ref="componentARef" />
+        <ComponentB v-else-if="currentStep === 2" v-model:adress="formData" />
+        <ComponentC v-else v-model:form="formData" />
+      </Transition>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+      <div class="navigation">
+        <button @click="prevStep" :disabled="currentStep === 1 || isLoading">Previous</button>
+
+        <button v-if="currentStep < 3" @click="nextStep" :disabled="isLoading">Next</button>
+
+        <button v-else @click="submitForm" :disabled="isLoading">
+          {{ isLoading ? 'Submitting...' : 'Submit' }}
+        </button>
+      </div>
     </div>
-  </header>
-
-  <RouterView />
+  </main> -->
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
+.steps-indicator {
   text-align: center;
-  margin-top: 2rem;
+  margin-bottom: 20px;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
