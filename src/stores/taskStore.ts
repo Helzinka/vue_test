@@ -1,4 +1,4 @@
-import { createGenericStore, GenericItem } from './generic/useGenericStore';
+import { createGenericStore, type GenericItem } from './generic/useGenericStore';
 
 interface Task extends GenericItem {
   id: string;

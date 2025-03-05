@@ -36,10 +36,9 @@
 </template>
 
 <script setup lang="ts">
-import type { FormData } from '../types/FormData';
 import { ref, computed } from 'vue';
 
-const personal = defineModel<FormData>('personal');
+const personal = defineModel('personal');
 
 interface Errors {
   firstName?: string;

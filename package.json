@@ -5,19 +5,6 @@
   "license": "MIT",
   "type": "module",
   "private": true,
-  "author": {
-    "name": "Logue",
-    "email": "logue@hotmail.co.jp",
-    "url": "https://logue.dev/"
-  },
-  "homepage": "https://github.com/logue/vite-vue3-ts-starter",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:logue/vite-vue3-ts-starter.git"
-  },
-  "bugs": {
-    "url": "https://github.com/logue/vite-vue3-ts-starter/issues"
-  },
   "packageManager": "pnpm@10.5.2",
   "scripts": {
     "dev": "vite",

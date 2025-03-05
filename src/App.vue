@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import type { FormData } from './types/FormData';
 import ComponentA from './components/componentA.vue';
 import ComponentB from './components/componentB.vue';
 import ComponentC from './components/componentC.vue';
@@ -9,7 +8,7 @@ import TaskList from './components/TaskList.vue';
 const currentStep = ref(1);
 const isLoading = ref(false);
 
-const formData = ref<FormData>({
+const formData = ref({
   firstName: '',
   lastName: '',
   email: '',
